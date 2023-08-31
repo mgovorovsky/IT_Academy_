@@ -5,9 +5,9 @@ b = int(input())
 print("Введите значение 3:") 
 c = int(input())
 step_1 = a and b and c and "Нет нулевых значений!!!"
-print('step1', step_1)
+print(step_1)
 step_2 = a or b or c or "Введены все нули!"
-print('step2', step_2)
+print(step_2)
 if a > (b + c):
     print(a - b - c)
 if a < (b + c):
