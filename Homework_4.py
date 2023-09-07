@@ -36,7 +36,6 @@ name_2 = "50/50"
 name_3 = "Помощь зала"
 hints = [name_1, name_2, name_3]
 i = 0
-quant_hints = len(hints)
 
 
 def one_question(i):
@@ -47,8 +46,8 @@ def one_question(i):
     c = b.pop()
     print("Вопрос на " + str(value_question[0]) + " рублей:\n" + questions[i])
     print("Варианты ответов:")
-    k = 0
     answ_list = []
+    k = 0
     while k < 4:
         q = randint(0, (3 - k))
         answ_var = c.pop(q)
@@ -56,56 +55,64 @@ def one_question(i):
         k += 1
         new_answ = list(answ_var)
         answ_list = answ_list + new_answ
-    # print(answ_list)  # показывает варианты ответов
-    print("Выберите Ваш вариант ответа: (для выбора подскази нажмите 5)")
+        # print(answ_list)  # показывает варианты ответов
+    print("Выберите Ваш вариант ответа: (для выбора подсказки нажмите 5)")
     answ_numb = int(input())
     answ_check = answ_numb * 2 - 2
+
+    def hints_activ_call():
+        len_answ_call = len(answ_list)
+        call_choise = randrange(1, (len_answ_call-1), 2)
+        print("Ваш друг выбрал вариант:", answ_list[call_choise])
+
+    def hints_activ_hall():
+        len_answ_hall = len(answ_list)
+        hall_choise = randrange(1, (len_answ_hall-1), 2)
+        print("Зал выбрал вариант:", answ_list[hall_choise])
+
+    def hints_fifty():
+        step = 0
+        if answ_list[step] == False:
+            del (answ_list[0])
+            del (answ_list[0])
+        else:
+            del (answ_list[2])
+            del (answ_list[2])
+        if answ_list[step] == False:
+            del (answ_list[0])
+            del (answ_list[0])
+        else:
+            del (answ_list[2])
+            del (answ_list[2])
+        one_of_fyfty = answ_list[1:4:2]
+        print("Один из правильных вариантов:")
+        print(str(one_of_fyfty[0]))
+        print(str(one_of_fyfty[1]))
+
     if answ_numb == 5:
 
-        def hints_activ_call():
-            len_answ_call = len(answ_list)
-            call_choise = randrange(1, (len_answ_call-1), 2)
-            print("Ваш друг выбрал вариант:", answ_list[call_choise])
-
-        def hints_activ_hall():
-            len_answ_hall = len(answ_list)
-            hall_choise = randrange(1, (len_answ_hall-1), 2)
-            print("Зал выбрал вариант:", answ_list[hall_choise])
-
-        def hints_fifty():
-            step = 0
-            if answ_list[step] == False:
-                del (answ_list[0])
-                del (answ_list[0])
-            else:
-                del (answ_list[2])
-                del (answ_list[2])
-            if answ_list[step] == False:
-                del (answ_list[0])
-                del (answ_list[0])
-            else:
-                del (answ_list[2])
-                del (answ_list[2])
-
         def hints_choise():
-            l = 0
-            if quant_hints != 0:
-                print("Выберите подсказку: ")
-                while l < quant_hints:
+
+            def one_step():
+                print("Выберите подсказку:")
+                l = 0
+                while l < len(hints):
                     print(str(l + 1) + ": " + str(hints[l]))
                     l += 1
                 hint_numb = int(input())
-
-                if hints[hint_numb] == name_1:
+                if hints[hint_numb - 1] == name_1:
                     hints_activ_call()
-                if hints[hint_numb] == name_3:
+                if hints[hint_numb - 1] == name_3:
                     hints_activ_hall()
-                if hints[hint_numb] == name_2:
+                if hints[hint_numb - 1] == name_2:
                     hints_fifty()
                 del hints[(hint_numb - 1)]
-                # print(hints)  # смотрим, что осталось из подсказок
-            else:
+
+            while len(hints) > 0:
+                one_step()
+            if len(hints) == 0:
                 print("Подсказок больше нет!")
+        hints_choise()
     elif answ_list[answ_check] == False and answ_numb != 5:
         print("Ответ неверный. Ваш выигрыш - 0!")
     else:
