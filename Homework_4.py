@@ -1,4 +1,6 @@
 from random import randint, randrange
+from os import system, name
+from time import sleep
 questions = [
     "Как называется разновидность воды, в которой атом водорода замещён его изотопом дейтерия?",
     "Что такое десница?",
@@ -38,15 +40,37 @@ hints = [name_1, name_2, name_3]
 i = 0
 
 
+def clear():
+    if name == 'nt':
+        _ = system('cls')
+    else:
+        _ = system('clear')
+
+
+def counter():
+    count_1 = 0
+    if i > 0:
+        count = list(questions[(i + 9)].keys())
+        count_1 = count[0]
+    return count_1
+
+
+def getting_money(i):
+    if i < 9:
+        print("Вы выиграли", str(counter()), "рублей!")
+
+
 def one_question(i):
     question_dict = questions[(i + 10)]
     value_question = list(question_dict.keys())
     a = question_dict.values()
     b = list(a)
-    c = b.pop()
-    print("Вопрос на " + str(value_question[0]) + " рублей:\n" + questions[i])
-    print("Варианты ответов:")
+    b_1 = b[0]
+    c = list(b_1)
     answ_list = []
+    print("Вопрос на " +
+          str(value_question[0]) + " рублей:\n" + questions[i])
+    print("Варианты ответов:")
     k = 0
     while k < 4:
         q = randint(0, (3 - k))
@@ -55,20 +79,22 @@ def one_question(i):
         k += 1
         new_answ = list(answ_var)
         answ_list = answ_list + new_answ
-        # print(answ_list)  # показывает варианты ответов
+    new_answ_list = list(answ_list)
     print("Выберите Ваш вариант ответа: (для выбора подсказки нажмите 5)")
     answ_numb = int(input())
     answ_check = answ_numb * 2 - 2
 
     def hints_activ_call():
         len_answ_call = len(answ_list)
-        call_choise = randrange(1, (len_answ_call-1), 2)
-        print("Ваш друг выбрал вариант:", answ_list[call_choise])
+        call_choice = randrange(1, (len_answ_call-1), 2)
+        print("Ваш друг выбрал вариант:", answ_list[call_choice])
+        print()
 
     def hints_activ_hall():
         len_answ_hall = len(answ_list)
-        hall_choise = randrange(1, (len_answ_hall-1), 2)
-        print("Зал выбрал вариант:", answ_list[hall_choise])
+        hall_choice = randrange(1, (len_answ_hall-1), 2)
+        print("Зал выбрал вариант:", answ_list[hall_choice])
+        print()
 
     def hints_fifty():
         step = 0
@@ -88,12 +114,16 @@ def one_question(i):
         print("Один из правильных вариантов:")
         print(str(one_of_fyfty[0]))
         print(str(one_of_fyfty[1]))
+        print()
 
     if answ_numb == 5:
 
-        def hints_choise():
-
-            def one_step():
+        def one_step():
+            if len(hints) == 0:
+                print("Подсказок больше нет!")
+                print()
+                return
+            else:
                 print("Выберите подсказку:")
                 l = 0
                 while l < len(hints):
@@ -108,15 +138,55 @@ def one_question(i):
                     hints_fifty()
                 del hints[(hint_numb - 1)]
 
-            while len(hints) > 0:
+        while len(hints) >= 0:
+            print(
+                "Нажмите:\n 1 - для выбора подсказки\n 2 - продолжить\n 3 - чтобы забрать деньги")
+            step_after_hint = int(input())
+            if step_after_hint == 1:
                 one_step()
-            if len(hints) == 0:
-                print("Подсказок больше нет!")
-        hints_choise()
-    elif answ_list[answ_check] == False and answ_numb != 5:
-        print("Ответ неверный. Ваш выигрыш - 0!")
-    else:
+            if step_after_hint == 2:
+                print("Вопрос на " +
+                      str(value_question[0]) + " рублей:\n" + questions[i])
+                print("Варианты ответов:")
+                print("1:", str(new_answ_list[1]))
+                print("2:", str(new_answ_list[3]))
+                print("3:", str(new_answ_list[5]))
+                print("4:", str(new_answ_list[7]))
+                print("Выберите Ваш вариант ответа:")
+                answ_numb = int(input())
+                answ_check = answ_numb * 2 - 2
+
+                if new_answ_list[answ_check] == True:
+                    print("Верно!")
+                    print("Вы выиграли " + str(value_question[0]) + " рублей")
+                    sleep(2)
+                    clear()
+                    return True
+
+                elif answ_list[answ_check] == False:
+                    print("Ответ неверный. Ваш выигрыш - 0!")
+                    return False
+            if step_after_hint == 3:
+                return "get_money"
+
+    elif answ_list[answ_check] == True:
         print("Верно!")
+        print("Вы выиграли " + str(value_question[0]) + " рублей")
+        sleep(2)
+        clear()
+
+    elif answ_list[answ_check] == False:
+        print("Ответ неверный. Ваш выигрыш - 0!")
+        return False
 
 
-one_question(9)
+while i <= 9:
+    result = one_question(i)
+    if result == False:
+        break
+    elif result == "get_money":
+        getting_money(i)
+        break
+    if result == True:
+        counter()
+    i += 1
