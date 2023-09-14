@@ -19,7 +19,7 @@ login = input("enter your user type: ")
 
 @check_if_admin
 def print_account():
-    print("You have 5 new messeges")
+    print("You have 5 new messages")
 
 
 print_account()
