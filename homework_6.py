@@ -1,5 +1,4 @@
 import helpers_watch
-from variables_watch import rows_number, delimiters_dictionary
 
 
 def main():

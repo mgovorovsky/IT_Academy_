@@ -1,6 +1,5 @@
 from variables_watch import space_1, rows_number, numbers_dictionary, delimiters_dictionary, color
 from os import system, name
-from random import randint
 import datetime
 import time
 
